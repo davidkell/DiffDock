@@ -40,7 +40,7 @@ parser.add_argument('--no_final_step_noise', action='store_true', default=False,
 parser.add_argument('--inference_steps', type=int, default=20, help='Number of denoising steps')
 parser.add_argument('--actual_steps', type=int, default=None, help='Number of denoising steps that are actually performed')
 
-parser.add_argument('--device', type=str, default='cpu', help='Device for inference')
+parser.add_argument('--device', type=str, default=None, help='Device for inference')
 
 args = parser.parse_args()
 
