@@ -39,6 +39,9 @@ parser.add_argument('--batch_size', type=int, default=32, help='')
 parser.add_argument('--no_final_step_noise', action='store_true', default=False, help='Use no noise in the final step of the reverse diffusion')
 parser.add_argument('--inference_steps', type=int, default=20, help='Number of denoising steps')
 parser.add_argument('--actual_steps', type=int, default=None, help='Number of denoising steps that are actually performed')
+
+parser.add_argument('--device', type=str, default='cpu', help='Device for inference')
+
 args = parser.parse_args()
 
 os.makedirs(args.out_dir, exist_ok=True)
@@ -48,7 +51,7 @@ if args.confidence_model_dir is not None:
     with open(f'{args.confidence_model_dir}/model_parameters.yml') as f:
         confidence_args = Namespace(**yaml.full_load(f))
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device(args.device or ('cuda' if torch.cuda.is_available() else 'cpu'))
 
 if args.protein_ligand_csv is not None:
     df = pd.read_csv(args.protein_ligand_csv)
