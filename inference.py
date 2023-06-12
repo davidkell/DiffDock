@@ -184,7 +184,7 @@ for idx, orig_complex_graph in tqdm(enumerate(test_loader)):
             confidence = confidence[re_order]
             confidences_list.append(confidence)
             ligand_pos = ligand_pos[re_order]
-        write_dir = f'{args.out_dir}/complex_names[idx]}'
+        write_dir = f'{args.out_dir}/{complex_names[idx]}'
         os.makedirs(write_dir, exist_ok=True)
         for rank, pos in enumerate(ligand_pos):
             mol_pred = copy.deepcopy(lig)
