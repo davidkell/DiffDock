@@ -77,7 +77,7 @@ test_dataset = InferenceDataset(out_dir=args.out_dir, complex_names=complex_name
                                 receptor_radius=score_model_args.receptor_radius, remove_hs=score_model_args.remove_hs,
                                 c_alpha_max_neighbors=score_model_args.c_alpha_max_neighbors,
                                 all_atoms=score_model_args.all_atoms, atom_radius=score_model_args.atom_radius,
-                                atom_max_neighbors=score_model_args.atom_max_neighbors)
+                                atom_max_neighbors=score_model_args.atom_max_neighbors, device=device)
 test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False)
 
 if args.confidence_model_dir is not None and not confidence_args.use_original_model_cache:
@@ -91,7 +91,7 @@ if args.confidence_model_dir is not None and not confidence_args.use_original_mo
                          c_alpha_max_neighbors=confidence_args.c_alpha_max_neighbors,
                          all_atoms=confidence_args.all_atoms, atom_radius=confidence_args.atom_radius,
                          atom_max_neighbors=confidence_args.atom_max_neighbors,
-                         precomputed_lm_embeddings=test_dataset.lm_embeddings)
+                         precomputed_lm_embeddings=test_dataset.lm_embeddings, device=device)
 else:
     confidence_test_dataset = None
 
