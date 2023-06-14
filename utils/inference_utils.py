@@ -87,7 +87,7 @@ def get_sequences(protein_files, protein_sequences):
     return new_sequences
 
 
-def compute_ESM_embeddings(model, alphabet, labels, sequences):
+def compute_ESM_embeddings(model, alphabet, labels, sequences, device):
     # settings used
     toks_per_batch = 4096
     repr_layers = [33]
@@ -107,8 +107,7 @@ def compute_ESM_embeddings(model, alphabet, labels, sequences):
     with torch.no_grad():
         for batch_idx, (labels, strs, toks) in enumerate(data_loader):
             print(f"Processing {batch_idx + 1} of {len(batches)} batches ({toks.size(0)} sequences)")
-            if torch.cuda.is_available():
-                toks = toks.to(device="cuda", non_blocking=True)
+            toks = toks.to(device=device, non_blocking=True)
 
             out = model(toks, repr_layers=repr_layers, return_contacts=False)
             representations = {layer: t.to(device="cpu") for layer, t in out["representations"].items()}
@@ -173,11 +172,7 @@ class InferenceDataset(Dataset):
             model_location = "esm2_t33_650M_UR50D"
             model, alphabet = pretrained.load_model_and_alphabet(model_location)
             model.eval()
-            
-            if device is not None:
-                model = model.to(device)
-            elif torch.cuda.is_available():
-                model = model.cuda()
+            model = model.to(device)
 
             protein_sequences = get_sequences(protein_files, protein_sequences)
             labels, sequences = [], []
