@@ -153,7 +153,7 @@ def generate_ESM_structure(model, filename, sequence):
 class InferenceDataset(Dataset):
     def __init__(self, out_dir, complex_names, protein_files, ligand_descriptions, protein_sequences, lm_embeddings,
                  receptor_radius=30, c_alpha_max_neighbors=None, precomputed_lm_embeddings=None,
-                 remove_hs=False, all_atoms=False, atom_radius=5, atom_max_neighbors=None):
+                 remove_hs=False, all_atoms=False, atom_radius=5, atom_max_neighbors=None, device=None):
 
         super(InferenceDataset, self).__init__()
         self.receptor_radius = receptor_radius
@@ -173,7 +173,10 @@ class InferenceDataset(Dataset):
             model_location = "esm2_t33_650M_UR50D"
             model, alphabet = pretrained.load_model_and_alphabet(model_location)
             model.eval()
-            if torch.cuda.is_available():
+            
+            if device is not None:
+                model = model.to(device)
+            elif torch.cuda.is_available():
                 model = model.cuda()
 
             protein_sequences = get_sequences(protein_files, protein_sequences)
