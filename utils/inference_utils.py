@@ -181,7 +181,7 @@ class InferenceDataset(Dataset):
                 sequences.extend(s)
                 labels.extend([complex_names[i] + '_chain_' + str(j) for j in range(len(s))])
 
-            lm_embeddings = compute_ESM_embeddings(model, alphabet, labels, sequences)
+            lm_embeddings = compute_ESM_embeddings(model, alphabet, labels, sequences, device)
 
             self.lm_embeddings = []
             for i in range(len(protein_sequences)):
